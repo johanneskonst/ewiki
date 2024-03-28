@@ -64,7 +64,7 @@ abstract class eMarkup
 
     static protected function comment_filter($line) // {{{1
     {
-        return $line != '#' && (strlen($line) < 2 || $line{0} != '#' || !ctype_space($line{1}));
+        return $line != '#' && (strlen($line) < 2 || $line[0] != '#' || !ctype_space($line[1]));
     }
 
     protected function error($s) // {{{1
@@ -106,12 +106,12 @@ abstract class eMarkup
             if ($b == strlen($in))
                 break;
 
-            if ($in{$b} == '\\')
+            if ($in[$b] == '\\')
             {
-                $target .= $in{$b+1};
+                $target .= $in[$b+1];
                 $a = $b+2;
             }
-            else if ($in{$b} == '|')
+            else if ($in[$b] == '|')
             {
                 $a = $b+1;
                 $label = $this->parse_par($in, $a, 'link_label');
@@ -124,7 +124,7 @@ abstract class eMarkup
             }
             else
             {
-                $target .= $in{$b};
+                $target .= $in[$b];
                 $a = $b+1;
             }
         }
@@ -148,7 +148,7 @@ abstract class eMarkup
             $a = $b+strlen($match);
             if ($match == '\\')
             {
-                $r .= $this->fmt_plain($in{$a});
+                $r .= $this->fmt_plain($in[$a]);
                 $a++;
                 continue;
             }
@@ -201,7 +201,7 @@ abstract class eMarkup
         for ($i = 0; $i < count($in);)
         {
             /* simple item */
-            if ($in[$i]{0} != '*')
+            if ($in[$i][0] != '*')
             {
                 $items[] = $this->fmt_listitem($this->parse_par($in[$i]));
                 $i++;
@@ -209,7 +209,7 @@ abstract class eMarkup
             }
 
             /* sublist */
-            for ($j = $i+1; $j < count($in) && $in[$j]{0} == '*'; $j++);
+            for ($j = $i+1; $j < count($in) && $in[$j][0] == '*'; $j++);
 
             $lines = array_slice($in, $i, $j-$i);
             $lines = implode("\n", $lines);
@@ -227,7 +227,7 @@ abstract class eMarkup
         while ($a < strlen($in))
         {
             $ishead = FALSE;
-            if ($in{$a} == '=')
+            if ($in[$a] == '=')
             {
                 $ishead = TRUE;
                 $a++;
@@ -252,11 +252,11 @@ abstract class eMarkup
     {
         if (empty($in))
             return NULL;
-        if ($in{0} == '*')
+        if ($in[0] == '*')
             return $this->fmt_list($this->parse_list($in));
-        if ($in{0} == '|')
+        if ($in[0] == '|')
             return $this->parse_table($in);
-        if ($in{0} == '#')
+        if ($in[0] == '#')
             return $this->parse_special(trim($in));
         /* heading */
         if (preg_match('/^ (={2,}) \s* (.+?) =* (?:\s|\n)* $/x', $in, $m))
@@ -289,14 +289,14 @@ abstract class eMarkup
                 $cur = '';
                 continue;
             }
-            else if (($line{0} == '=' || $cur == '=') /* "=" starts new block and lasts only 1 line */
-                  || ($cur != $line{0} /* one of "#|*" in a block of different type starts a new block */
-                   && ($line{0} == '#' || $line{0} == '|' || $line{0} == '*')))
+            else if (($line[0] == '=' || $cur == '=') /* "=" starts new block and lasts only 1 line */
+                  || ($cur != $line[0] /* one of "#|*" in a block of different type starts a new block */
+                   && ($line[0] == '#' || $line[0] == '|' || $line[0] == '*')))
             {
                 if (!empty($block))
                     $blocks[] = $block;
                 $block = '';
-                $cur = $line{0};
+                $cur = $line[0];
             }
             $block .= $line."\n";
         }
@@ -317,4 +317,3 @@ abstract class eMarkup
 
 // vim:set fdm=marker fmr={{{,}}}:
 
-?>

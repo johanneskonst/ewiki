@@ -16,14 +16,14 @@ class Core
 		$last = min(100, strlen($x));
 		for ($i = 0; $i < $last; $i++)
 		{
-		    $c = ord($x{$i});
+		    $c = ord($x[$i]);
 		    $special = array("\n" => '\\n', "\r" => '\\r', "\t" => '\\t', '\'' => '\\\'', '\\' => '\\\\');
-		    if (isset($special[$x{$i}]))
-			$s .= $special[$x{$i}];
+		    if (isset($special[$x[$i]]))
+			$s .= $special[$x[$i]];
 		    else if ($c < 32 || $c > 126)
 			$s .= sprintf('\\x%02X', $c);
 		    else
-			$s .= $x{$i};
+			$s .= $x[$i];
 		}
 		$s .= "'";
 		if (strlen($x) > 100)
@@ -155,4 +155,3 @@ set_error_handler(array('Core', 'handleError'));
 assert_options(ASSERT_CALLBACK, array('Core', 'handleAssertion'));
 assert_options(ASSERT_BAIL, 0); /* this would end the program without displaying anything */
 
-?>

@@ -55,7 +55,7 @@ function gentoken($len, $chrs='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
 {
     $str = '';
     for ($i = 0; $i < $len; $i++)
-        $str .= $chrs{mt_rand(0, strlen($chrs)-1)};
+        $str .= $chrs[mt_rand(0, strlen($chrs)-1)];
     return $str;
 }
 
@@ -295,7 +295,8 @@ else if ($special[0] == 'merge') // {{{1
     else if (count($changes) != 1)
         throw new Exception('Not implemented: more than one file changed');
 
-    list($path, $type) = each($changes);
+    #list($path, $type) = each($changes);
+    list($path, $type) = [key($changes), current($changes)];
     $view->page_name = $path;
 
     foreach (array($A, $B) as $I)
@@ -428,7 +429,7 @@ else if ($special === NULL) // page-related {{{1
         {
             /* FIXME: ignores current commit_id */
             $entries = $page->listEntries();
-            usort($entries, create_function('$a, $b', 'return call_user_func(Config::TREE_VIEW_SORT, $a->getName(), $b->getName());'));
+            usort($entries, function($a, $b) { return call_user_func(Config::TREE_VIEW_SORT, $a->getName(), $b->getName()); });
             $view->entries = $entries;
         }
         else if ($type == NULL)
@@ -707,7 +708,7 @@ else if ($special === NULL) // page-related {{{1
                     imagewbmp($new_image);
                     break;
                 case 'image/x-xbitmap':
-                    imagexbm($new_image);
+                    imagexbm($new_image, null);
                     break;
                 default:
                     throw new Exception(sprintf('unhandled image type: %s', $page->getMimeType()));
@@ -728,4 +729,3 @@ else if ($special !== NULL) // {{{1
 
 /* vim:set fdm=marker fmr={{{,}}}: */
 
-?>

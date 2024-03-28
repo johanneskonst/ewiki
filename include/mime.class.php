@@ -5,6 +5,8 @@ class MIME
     protected $cache;
     protected $version;
     protected $offset;
+    public $literal_size;
+    public $glob_size;
 
     protected function substr($pos, $len)
     {
@@ -122,7 +124,7 @@ class MIME
                     $type_off = $this->uint32_at($pos+4);
                     return $this->string_at($type_off);
                 }
-                else if ($filename{strlen($filename)-strlen($suffix)-1} == chr($c))
+                else if ($filename[strlen($filename)-strlen($suffix)-1] == chr($c))
                 {
                     $suffix = chr($c).$suffix; /* FIXME: make unicode-aware? */
                     if (strlen($suffix) >= strlen($filename))
@@ -193,7 +195,7 @@ class MIME
         {
             for ($i = 0; $i < $len; $i++)
             {
-                $c = ord($buf{$start+$i});
+                $c = ord($buf[$start+$i]);
                 if ($mask)
                     $c &= $mask[$i];
                 if ($c != $value[$i])
@@ -239,7 +241,7 @@ class MIME
     {
         for ($i = 0; $i < 32 && $i < strlen($buf); $i++)
         {
-            $c = ord($buf{$i});
+            $c = ord($buf[$i]);
             if ($c < 0x20 && $c != 0x09 /* \t */ && $c != 0x0A /* \n */)
                 return TRUE;
         }
@@ -293,4 +295,3 @@ class MIME
     }
 }
 
-?>

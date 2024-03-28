@@ -60,4 +60,3 @@ final class Config
     const MIME_CACHE_PATH = '/usr/share/mime/mime.cache';
 }
 
-?>

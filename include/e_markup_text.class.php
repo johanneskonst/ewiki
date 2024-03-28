@@ -23,4 +23,3 @@ class eMarkupText extends eMarkup
     protected function fmt_labeled_link($url, $label) { return sprintf("'%s' [%s]", $label, $url); }
 }
 
-?>

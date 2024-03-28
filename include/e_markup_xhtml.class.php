@@ -80,4 +80,3 @@ class eMarkupXHTML extends eMarkup
     }
 }
 
-?>
